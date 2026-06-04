@@ -77,12 +77,18 @@ export default function FinishPage({ params }: { params: Promise<{ id: string }>
           <Card className="mb-6 p-4">
             <p className="text-xs text-muted tracking-widest mb-3">EVENT TIMELINE</p>
             <div className="space-y-1">
-              {activeEvents.map(e => (
-                <EventItem key={e.id} minute={e.minute}
-                  type={e.eventType === 'goal' ? 'goal' : e.cardType === 'yellow' ? 'yellow' : e.cardType === 'red' ? 'red' : 'sub'}
-                  description={e.eventType === 'goal' ? `${e.playerName}` : e.eventType === 'card' ? `${e.playerName} — ${e.cardType}` : `${e.playerOut} → ${e.playerIn}`}
-                />
-              ))}
+              {activeEvents.map(e => {
+                const type = e.eventType === 'goal' ? 'goal' : e.cardType === 'yellow' ? 'yellow' : e.cardType === 'red' ? 'red' : 'sub';
+                const playerName = e.eventType === 'sub' ? `${e.playerOut} → ${e.playerIn}` : e.playerName;
+                const extraInfo = e.eventType === 'goal' && e.goalType !== 'normal' ? ` (${e.goalType})` : '';
+                return (
+                  <EventItem key={e.id} minute={e.minute}
+                    type={type}
+                    playerName={`${playerName}${extraInfo}`}
+                    teamSide={e.team === 'team_a' ? 'home' : 'away'}
+                  />
+                );
+              })}
             </div>
           </Card>
         )}

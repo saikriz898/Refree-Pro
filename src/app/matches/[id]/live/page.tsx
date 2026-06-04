@@ -245,19 +245,16 @@ export default function LiveMatchPage({ params }: { params: Promise<{ id: string
     <div className="space-y-1">
       {[...evts].reverse().map((e, i) => {
         const type = e.eventType === 'goal' ? 'goal' : e.cardType ? 'card' : 'sub';
-        const desc = e.eventType === 'goal'
-          ? `${e.playerName} (${e.team === 'team_a' ? match?.teamA : match?.teamB}) — ${e.goalType === 'normal' ? 'Goal' : e.goalType}`
-          : e.eventType === 'card'
-          ? `${e.playerName} — ${e.cardType === 'yellow' ? 'Yellow' : 'Red'} Card (${e.team === 'team_a' ? match?.teamA : match?.teamB})`
-          : `${e.playerOut} → ${e.playerIn} (${e.team === 'team_a' ? match?.teamA : match?.teamB})`;
+        const playerName = e.eventType === 'sub' ? `${e.playerOut} → ${e.playerIn}` : e.playerName;
+        const extraInfo = e.eventType === 'goal' && e.goalType !== 'normal' ? ` (${e.goalType})` : '';
         return (
           <EventItem
             key={e.id}
             minute={e.minute}
             elapsedMs={e.elapsedMs}
             type={type as any}
-            description={desc}
-            teamColor={e.team === 'team_a' ? match?.teamAColor : match?.teamBColor}
+            playerName={`${playerName}${extraInfo}`}
+            teamSide={e.team === 'team_a' ? 'home' : 'away'}
             isUndone={e.isUndone}
           />
         );

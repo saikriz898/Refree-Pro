@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { Download, Share2 } from 'lucide-react';
 import { MatchTimer } from '@/lib/timer';
+import { EventItem } from '@/components/match/EventItem';
 
 const templates = ['Match Night', 'Broadcast Result', 'Matchday Premium', 'Minimal Sports', 'Neon Cyber', 'Classic Gold', 'Real Pitch', 'Stadium Lights'];
 
@@ -86,9 +87,7 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
 
   if (!match) return <div className="h-[100dvh] flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full" /></div>;
 
-  const goals = events.filter(e => e.eventType === 'goal' && !e.isUndone);
-  const yellows = events.filter(e => e.cardType === 'yellow' && !e.isUndone);
-  const reds = events.filter(e => e.cardType === 'red' && !e.isUndone);
+  const activeEvents = events.filter(e => !e.isUndone && e.eventType !== 'sub');
 
   const templateStyles = [
     { bg: 'bg-[#0A0A0A]', accent: 'text-primary', accentBg: 'bg-primary/20', scoreColor: 'text-white', border: 'border-primary/30' },
@@ -245,21 +244,29 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
                     </div>
 
                   {/* Match events */}
-                  {goals.length > 0 && (
-                    <div className={`mt-6 space-y-2 p-4 rounded-xl border ${template === 1 ? 'bg-white/95 border-gray-200 text-gray-800' : 'bg-black/70 border-white/10 text-white/90'}`}>
-                      <div className="text-[10px] uppercase tracking-widest font-bold mb-2 opacity-60 flex items-center justify-center gap-2">
+                  {activeEvents.length > 0 && (
+                    <div className={`mt-6 space-y-1 p-3 rounded-xl border ${template === 1 ? 'bg-white/95 border-gray-200 text-gray-800' : 'bg-black/70 border-white/10 text-white/90'}`}>
+                      <div className="text-[10px] uppercase tracking-widest font-bold mb-1 opacity-60 flex items-center justify-center gap-2">
                         <div className="w-3 h-[1px] bg-current"></div>
-                        Goals
+                        TIMELINE
                         <div className="w-3 h-[1px] bg-current"></div>
                       </div>
-                      {goals.map(g => (
-                        <div key={g.id} className="text-xs flex items-center justify-center gap-2">
-                          <span className="font-semibold">{g.playerName}</span>
-                          <span className={`text-[10px] px-1.5 rounded font-bold ${ts.accentBg} ${ts.accent}`}>
-                            {g.elapsedMs !== null && g.elapsedMs !== undefined ? MatchTimer.formatDisplay(g.elapsedMs) : `${g.minute}'`}
-                          </span>
-                        </div>
-                      ))}
+                      <div className="max-h-[140px] overflow-hidden">
+                        {activeEvents.map(e => {
+                          const type = e.eventType === 'goal' ? 'goal' : e.cardType === 'yellow' ? 'yellow' : e.cardType === 'red' ? 'red' : 'sub';
+                          const extraInfo = e.eventType === 'goal' && e.goalType !== 'normal' ? ` (${e.goalType})` : '';
+                          return (
+                            <EventItem
+                              key={e.id}
+                              minute={e.minute}
+                              elapsedMs={e.elapsedMs}
+                              type={type as any}
+                              playerName={`${e.playerName}${extraInfo}`}
+                              teamSide={e.team === 'team_a' ? 'home' : 'away'}
+                            />
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -267,7 +274,6 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
                 <div className={`text-center`}>
                   <div className={`w-12 h-1 mx-auto mb-4 rounded-full ${template === 1 ? 'bg-gray-300' : 'bg-white/20'}`}></div>
                   <p className={`font-bold tracking-widest text-sm mb-1 ${ts.accent}`}>REFEREE PRO</p>
-                  {yellows.length > 0 && <p className={`text-[10px] uppercase tracking-wider font-medium ${template === 1 ? 'text-gray-500' : 'text-white/60'}`}>Cards: 🟨 {yellows.length} {reds.length > 0 ? `🟥 ${reds.length}` : ''}</p>}
                 </div>
               </div>
             </div>

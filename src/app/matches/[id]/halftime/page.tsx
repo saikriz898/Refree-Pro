@@ -99,19 +99,16 @@ export default function HalftimePage({ params }: { params: Promise<{ id: string 
             <div className="space-y-1">
               {activeEvents.map((e) => {
                 const type = e.eventType === 'goal' ? 'goal' : e.cardType === 'yellow' ? 'yellow' : e.cardType === 'red' ? 'red' : 'sub';
-                const desc = e.eventType === 'goal'
-                  ? `${e.playerName} (${e.team === 'team_a' ? match.teamA : match.teamB})`
-                  : e.eventType === 'card'
-                  ? `${e.playerName} — ${e.cardType} card`
-                  : `${e.playerOut} → ${e.playerIn}`;
+                const playerName = e.eventType === 'sub' ? `${e.playerOut} → ${e.playerIn}` : e.playerName;
+                const extraInfo = e.eventType === 'goal' && e.goalType !== 'normal' ? ` (${e.goalType})` : '';
                 return (
                   <EventItem
                     key={e.id}
                     minute={e.minute}
                     elapsedMs={e.elapsedMs}
                     type={type as any}
-                    description={desc}
-                    teamColor={e.team === 'team_a' ? match.teamAColor : match.teamBColor}
+                    playerName={`${playerName}${extraInfo}`}
+                    teamSide={e.team === 'team_a' ? 'home' : 'away'}
                   />
                 );
               })}
