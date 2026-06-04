@@ -27,7 +27,7 @@ const colors = [
 ];
 
 const JerseyIcon = ({ color }: { color: string }) => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill={color} className="transition-colors duration-300 drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.15)]">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill={color} stroke="var(--color-foreground)" strokeWidth="1.5" strokeOpacity="0.2" className="transition-colors duration-300 drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.15)]">
     <path d="M6 3L8 5C9 4 10 3.5 12 3.5C14 3.5 15 4 16 5L18 3C19 3 20 4 20 5V10H17V21H7V10H4V5C4 4 5 3 6 3Z" />
   </svg>
 );
@@ -92,8 +92,14 @@ export default function TeamsPage() {
                     <input
                       value={name}
                       onChange={(e) => update({ [key]: e.target.value.toUpperCase() } as any)}
-                      className="w-full bg-transparent text-base font-extrabold outline-none placeholder-muted/50 transition-colors uppercase border-none p-0 focus:ring-0"
-                      style={{ color: name ? color : 'var(--color-foreground)' }}
+                      className={cn(
+                        "w-full text-base font-extrabold outline-none placeholder-muted/50 transition-colors uppercase border-none focus:ring-0",
+                        name && (color === '#F8F9F9' || color === '#1A1D20') ? "px-2 py-0.5 rounded-md" : "p-0 bg-transparent"
+                      )}
+                      style={{ 
+                        color: name ? color : 'var(--color-foreground)',
+                        backgroundColor: name && color === '#F8F9F9' ? '#1A1D20' : name && color === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                      }}
                       placeholder={`Enter ${label} name...`}
                     />
                   </div>
@@ -145,10 +151,20 @@ export default function TeamsPage() {
       </div>
 
       {/* Sticky Bottom Actions */}
-      <div className="bg-background/85 backdrop-blur-md border-t border-border/10 px-4 py-3.5 flex gap-3 sticky bottom-0 z-40 shrink-0">
-        <Button variant="ghost" className="w-1/3" onClick={() => router.back()}>← Back</Button>
-        <Button className="flex-1" disabled={!valid} onClick={() => router.push('/matches/create/config')}>
-          {valid ? 'Next Step' : 'Select Format'}
+      <div className="bg-background/85 backdrop-blur-md border-t border-border/10 px-4 py-4 flex gap-3 sticky bottom-0 z-40 shrink-0 pb-safe">
+        <Button 
+          variant="ghost" 
+          className="w-1/3 font-semibold text-muted-foreground hover:bg-foreground/5" 
+          onClick={() => router.back()}
+        >
+          ← Back
+        </Button>
+        <Button 
+          className="flex-1 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow text-[15px] font-bold" 
+          disabled={!valid} 
+          onClick={() => router.push('/matches/create/config')}
+        >
+          {valid ? 'Next Step →' : 'Select Format'}
         </Button>
       </div>
     </div>

@@ -78,15 +78,15 @@ export default function LockPage({ params }: { params: Promise<{ id: string }> }
           <div className="glass rounded-xl p-3 text-center text-sm text-primary mb-4">🔒 Match is locked — read only</div>
         )}
 
-        <div className="grid grid-cols-3 gap-2">
-          <Button variant="secondary" onClick={() => router.push(`/matches/${id}/report`)}>
-            <FileText size={14} /><span className="text-xs">PDF Report</span>
+        <div className="grid grid-cols-3 gap-3">
+          <Button variant="secondary" className="flex flex-col items-center justify-center h-20 gap-2" onClick={() => router.push(`/matches/${id}/report`)}>
+            <FileText size={20} /><span className="text-[11px] font-bold tracking-wide">PDF Report</span>
           </Button>
-          <Button variant="secondary" onClick={() => router.push(`/matches/${id}/poster`)}>
-            <Image size={14} /><span className="text-xs">Poster</span>
+          <Button variant="secondary" className="flex flex-col items-center justify-center h-20 gap-2" onClick={() => router.push(`/matches/${id}/poster`)}>
+            <Image size={20} /><span className="text-[11px] font-bold tracking-wide">Poster</span>
           </Button>
-          <Button variant="ghost" onClick={() => router.push(`/matches/${id}`)}>
-            <Eye size={14} /><span className="text-xs">View</span>
+          <Button variant="secondary" className="flex flex-col items-center justify-center h-20 gap-2 bg-transparent border border-border/50 hover:bg-foreground/5 text-foreground" onClick={() => router.push(`/matches/${id}`)}>
+            <Eye size={20} /><span className="text-[11px] font-bold tracking-wide">View</span>
           </Button>
         </div>
       </motion.div>

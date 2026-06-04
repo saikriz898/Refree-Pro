@@ -293,29 +293,35 @@ export default function LiveMatchPage({ params }: { params: Promise<{ id: string
         </div>
 
         {/* Main */}
-        <div className="flex-1 flex flex-col overflow-y-auto lg:overflow-hidden">
-          <div className="flex-1 flex flex-col items-center justify-center px-4 gap-4 w-full max-w-2xl mx-auto pb-32 lg:pb-4">
-            <Scoreboard
-              teamA={match.teamA} teamB={match.teamB}
-              scoreA={scoreA} scoreB={scoreB}
-              teamAColor={match.teamAColor} teamBColor={match.teamBColor}
-            />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 flex flex-col items-center justify-between px-4 pt-2 pb-28 lg:pb-4 w-full max-w-2xl mx-auto min-h-0">
+            <div className="w-full shrink-0">
+              <Scoreboard
+                teamA={match.teamA} teamB={match.teamB}
+                scoreA={scoreA} scoreB={scoreB}
+                teamAColor={match.teamAColor} teamBColor={match.teamBColor}
+              />
+            </div>
 
-            <StopwatchModel matchDuration={match?.matchDuration} size={280} />
+            <div className="flex-1 w-full min-h-0 flex items-center justify-center py-2">
+              <StopwatchModel matchDuration={match?.matchDuration} size={280} />
+            </div>
 
             {/* Timer controls */}
-            <div className="flex w-full max-w-sm gap-2 mt-2">
-              <Button variant="secondary" onClick={handlePause} className="flex-1 flex items-center justify-center gap-1 px-0 text-sm">
-                {timer.isRunning ? <><Pause size={16} /> PAUSE</> : <><Play size={16} /> {timer.startedAtUnix ? 'RESUME' : 'START'}</>}
-              </Button>
-              {timer.currentHalf === 1 && (
-                <Button variant="secondary" onClick={() => setShowHalftimeModal(true)} className="flex-1 flex items-center justify-center gap-1 px-0 text-sm">
-                  <Timer size={16} /> HALF
+            <div className="w-full shrink-0 flex flex-col items-center">
+              <div className="flex w-full max-w-sm gap-2">
+                <Button variant="secondary" onClick={handlePause} className="flex-1 flex items-center justify-center gap-1 px-0 text-sm">
+                  {timer.isRunning ? <><Pause size={16} /> PAUSE</> : <><Play size={16} /> {timer.startedAtUnix ? 'RESUME' : 'START'}</>}
                 </Button>
-              )}
-              <Button variant="danger" onClick={() => setShowEndModal(true)} className="flex-1 flex items-center justify-center gap-1 px-0 text-sm">
-                <CheckCircle size={16} /> END
-              </Button>
+                {timer.currentHalf === 1 && (
+                  <Button variant="secondary" onClick={() => setShowHalftimeModal(true)} className="flex-1 flex items-center justify-center gap-1 px-0 text-sm">
+                    <Timer size={16} /> HALF
+                  </Button>
+                )}
+                <Button variant="danger" onClick={() => setShowEndModal(true)} className="flex-1 flex items-center justify-center gap-1 px-0 text-sm">
+                  <CheckCircle size={16} /> END
+                </Button>
+              </div>
             </div>
 
             {/* Goal Laps Dashboard */}

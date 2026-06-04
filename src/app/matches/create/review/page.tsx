@@ -7,13 +7,13 @@ import { CreateMatchStepper } from '../CreateMatchStepper';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { useToast } from '@/components/ui/Toast';
-import { MapPin, Hash, Calendar, Clock, User, Trophy, Timer, Coffee, Plus, Layers, Sparkles } from 'lucide-react';
+import { MapPin, Hash, Calendar, Clock, User, Trophy, Timer, Coffee, Plus, Layers, Sparkles, Ticket } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 const FootballModel = dynamic(() => import('@/components/3d/FootballModel').then(m => ({ default: m.FootballModel })), { ssr: false });
 
 const JerseyIcon = ({ color }: { color: string }) => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill={color} className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill={color} stroke="var(--color-foreground)" strokeWidth="1.5" strokeOpacity="0.2" className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
     <path d="M6 3L8 5C9 4 10 3.5 12 3.5C14 3.5 15 4 16 5L18 3C19 3 20 4 20 5V10H17V21H7V10H4V5C4 4 5 3 6 3Z" />
   </svg>
 );
@@ -78,7 +78,7 @@ export default function ReviewPage() {
 
   const rows = [
     { label: 'Venue', value: state.venue, icon: MapPin },
-    { label: 'Match #', value: state.matchNumber, icon: Hash },
+    { label: 'Match', value: state.matchNumber, icon: Ticket },
     { label: 'Date', value: state.matchDate, icon: Calendar },
     { label: 'Time', value: state.matchTime, icon: Clock },
     { label: 'Format', value: state.squadFormat, icon: Layers },
@@ -117,7 +117,12 @@ export default function ReviewPage() {
               <div className="w-16 h-16 rounded-2xl bg-muted/40 border border-border/50 flex items-center justify-center mb-2 shadow-inner">
                 <JerseyIcon color={state.teamAColor} />
               </div>
-              <span className="font-extrabold text-sm tracking-tight truncate w-full" style={{ color: state.teamAColor }}>
+              <span 
+                className={`font-extrabold text-sm tracking-tight truncate max-w-full ${(state.teamAColor === '#F8F9F9' || state.teamAColor === '#1A1D20') ? 'px-2 py-0.5 rounded-md' : 'w-full'}`} 
+                style={{ 
+                  color: state.teamAColor,
+                  backgroundColor: state.teamAColor === '#F8F9F9' ? '#1A1D20' : state.teamAColor === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                }}>
                 {state.teamA || 'TEAM A'}
               </span>
             </div>
@@ -134,7 +139,12 @@ export default function ReviewPage() {
               <div className="w-16 h-16 rounded-2xl bg-muted/40 border border-border/50 flex items-center justify-center mb-2 shadow-inner">
                 <JerseyIcon color={state.teamBColor} />
               </div>
-              <span className="font-extrabold text-sm tracking-tight truncate w-full" style={{ color: state.teamBColor }}>
+              <span 
+                className={`font-extrabold text-sm tracking-tight truncate max-w-full ${(state.teamBColor === '#F8F9F9' || state.teamBColor === '#1A1D20') ? 'px-2 py-0.5 rounded-md' : 'w-full'}`} 
+                style={{ 
+                  color: state.teamBColor,
+                  backgroundColor: state.teamBColor === '#F8F9F9' ? '#1A1D20' : state.teamBColor === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                }}>
                 {state.teamB || 'TEAM B'}
               </span>
             </div>
@@ -174,7 +184,12 @@ export default function ReviewPage() {
               <div className="space-y-1.5 border-r border-border/10 pr-2">
                 <div className="flex items-center gap-1.5 mb-2">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: state.teamAColor }} />
-                  <span className="text-[10px] font-bold tracking-wide truncate block" style={{ color: state.teamAColor }}>
+                  <span 
+                    className={`text-[10px] font-bold tracking-wide truncate block ${(state.teamAColor === '#F8F9F9' || state.teamAColor === '#1A1D20') ? 'px-1.5 py-0.5 rounded-sm inline-block' : ''}`} 
+                    style={{ 
+                      color: state.teamAColor,
+                      backgroundColor: state.teamAColor === '#F8F9F9' ? '#1A1D20' : state.teamAColor === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                    }}>
                     {state.teamA || 'TEAM A'}
                   </span>
                 </div>
@@ -184,8 +199,11 @@ export default function ReviewPage() {
                   state.players.filter(p => p.name && p.team === 'team_a').map((p, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs">
                       <span
-                        className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black text-white shrink-0 shadow-sm"
-                        style={{ backgroundColor: state.teamAColor }}
+                        className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 shadow-sm"
+                        style={{ 
+                          backgroundColor: state.teamAColor,
+                          color: state.teamAColor === '#F8F9F9' || state.teamAColor === '#F1C40F' ? '#1A1D20' : '#FFF'
+                        }}
                       >
                         {p.jerseyNo ?? '—'}
                       </span>
@@ -199,7 +217,12 @@ export default function ReviewPage() {
               <div className="space-y-1.5 pl-2">
                 <div className="flex items-center gap-1.5 mb-2">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: state.teamBColor }} />
-                  <span className="text-[10px] font-bold tracking-wide truncate block" style={{ color: state.teamBColor }}>
+                  <span 
+                    className={`text-[10px] font-bold tracking-wide truncate block ${(state.teamBColor === '#F8F9F9' || state.teamBColor === '#1A1D20') ? 'px-1.5 py-0.5 rounded-sm inline-block' : ''}`} 
+                    style={{ 
+                      color: state.teamBColor,
+                      backgroundColor: state.teamBColor === '#F8F9F9' ? '#1A1D20' : state.teamBColor === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                    }}>
                     {state.teamB || 'TEAM B'}
                   </span>
                 </div>
@@ -209,8 +232,11 @@ export default function ReviewPage() {
                   state.players.filter(p => p.name && p.team === 'team_b').map((p, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs">
                       <span
-                        className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black text-white shrink-0 shadow-sm"
-                        style={{ backgroundColor: state.teamBColor }}
+                        className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 shadow-sm"
+                        style={{ 
+                          backgroundColor: state.teamBColor,
+                          color: state.teamBColor === '#F8F9F9' || state.teamBColor === '#F1C40F' ? '#1A1D20' : '#FFF'
+                        }}
                       >
                         {p.jerseyNo ?? '—'}
                       </span>
@@ -225,10 +251,20 @@ export default function ReviewPage() {
       </div>
 
       {/* Sticky Bottom Actions */}
-      <div className="bg-background/85 backdrop-blur-md border-t border-border/10 px-4 py-3.5 flex gap-3 sticky bottom-0 z-40 shrink-0">
-        <Button variant="ghost" className="w-1/3" onClick={() => router.back()}>← Back</Button>
-        <Button className="flex-1" onClick={handleCreate} loading={loading}>
-          Confirm & Create Match →
+      <div className="bg-background/85 backdrop-blur-md border-t border-border/10 px-4 py-4 flex gap-3 sticky bottom-0 z-40 shrink-0 pb-safe">
+        <Button 
+          variant="ghost" 
+          className="w-1/3 font-semibold text-muted-foreground hover:bg-foreground/5" 
+          onClick={() => router.back()}
+        >
+          ← Back
+        </Button>
+        <Button 
+          className="flex-1 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow text-[15px] font-bold whitespace-nowrap flex items-center justify-center gap-1" 
+          onClick={handleCreate} 
+          loading={loading}
+        >
+          Create Match →
         </Button>
       </div>
 
@@ -273,11 +309,11 @@ export default function ReviewPage() {
                 <Sparkles size={20} className="text-primary animate-pulse" />
               </motion.div>
 
-              <h2 className="text-3xl font-extrabold tracking-tight score-digit text-foreground mb-2">
-                MATCH CREATED!
+              <h2 className="text-3xl font-extrabold tracking-tight text-foreground mb-2">
+                Match Created Successfully
               </h2>
               <p className="text-muted text-sm max-w-xs leading-relaxed mb-6 font-medium">
-                The match has been scheduled successfully. Directing to the Match Hub...
+                Your new match is set up and ready. Redirecting you back to the Match Hub...
               </p>
 
               {/* Progress Indicator */}

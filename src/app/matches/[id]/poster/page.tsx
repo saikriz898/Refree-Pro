@@ -223,8 +223,8 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
                     {/* Premium Score Section with Circles */}
                     <div className="flex items-center justify-between mb-8 w-full">
                       <div className="flex flex-col items-center w-24 shrink-0">
-                        <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 border-2 border-white/20 shrink-0" style={{ backgroundColor: match.teamAColor }}>
-                          <span className="text-xl font-bold text-white">{match.teamA.charAt(0)}</span>
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 border-2 border-white/20 shrink-0 shadow-inner" style={{ backgroundColor: match.teamAColor }}>
+                          <span className="text-xl font-bold" style={{ color: (match.teamAColor?.toUpperCase() === '#F8F9F9' || match.teamAColor?.toUpperCase() === '#FFFFFF' || match.teamAColor?.toUpperCase() === '#F1C40F') ? '#1A1D20' : '#FFFFFF' }}>{match.teamA.charAt(0)}</span>
                         </div>
                         <span className={`text-[10px] font-bold uppercase tracking-widest truncate w-full text-center ${template === 1 ? 'text-black' : 'text-white'}`}>{match.teamA}</span>
                       </div>
@@ -236,8 +236,8 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
                       </div>
 
                       <div className="flex flex-col items-center w-24 shrink-0">
-                        <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 border-2 border-white/20 shrink-0" style={{ backgroundColor: match.teamBColor }}>
-                          <span className="text-xl font-bold text-white">{match.teamB.charAt(0)}</span>
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 border-2 border-white/20 shrink-0 shadow-inner" style={{ backgroundColor: match.teamBColor }}>
+                          <span className="text-xl font-bold" style={{ color: (match.teamBColor?.toUpperCase() === '#F8F9F9' || match.teamBColor?.toUpperCase() === '#FFFFFF' || match.teamBColor?.toUpperCase() === '#F1C40F') ? '#1A1D20' : '#FFFFFF' }}>{match.teamB.charAt(0)}</span>
                         </div>
                         <span className={`text-[10px] font-bold uppercase tracking-widest truncate w-full text-center ${template === 1 ? 'text-black' : 'text-white'}`}>{match.teamB}</span>
                       </div>
@@ -255,15 +255,39 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
                         {activeEvents.map(e => {
                           const type = e.eventType === 'goal' ? 'goal' : e.cardType === 'yellow' ? 'yellow' : e.cardType === 'red' ? 'red' : 'sub';
                           const extraInfo = e.eventType === 'goal' && e.goalType !== 'normal' ? ` (${e.goalType})` : '';
+                          const timeDisplay = e.elapsedMs !== null && e.elapsedMs !== undefined ? MatchTimer.formatDisplay(e.elapsedMs) : `${e.minute}'`;
+                          const isHome = e.team === 'team_a';
+                          
                           return (
-                            <EventItem
-                              key={e.id}
-                              minute={e.minute}
-                              elapsedMs={e.elapsedMs}
-                              type={type as any}
-                              playerName={`${e.playerName}${extraInfo}`}
-                              teamSide={e.team === 'team_a' ? 'home' : 'away'}
-                            />
+                            <div key={e.id} className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center py-1.5 px-2">
+                              {/* Home Side */}
+                              <div className="flex justify-end items-center gap-2 text-right">
+                                {isHome && (
+                                  <>
+                                    <span className="text-sm font-bold truncate" style={{ color: 'inherit' }}>{e.playerName}{extraInfo}</span>
+                                    <span className="text-xs font-semibold tabular-nums" style={{ color: 'inherit', opacity: 0.6 }}>{timeDisplay}</span>
+                                  </>
+                                )}
+                              </div>
+
+                              {/* Center Icon */}
+                              <div className="flex justify-center items-center w-6 shrink-0">
+                                {type === 'goal' && <span className="text-sm">⚽</span>}
+                                {type === 'red' && <div className="w-2.5 h-3.5 bg-red-500 rounded-[2px] shadow-sm" />}
+                                {type === 'yellow' && <div className="w-2.5 h-3.5 bg-yellow-400 rounded-[2px] shadow-sm" />}
+                                {type === 'sub' && <span className="text-sm">🔄</span>}
+                              </div>
+
+                              {/* Away Side */}
+                              <div className="flex justify-start items-center gap-2 text-left">
+                                {!isHome && (
+                                  <>
+                                    <span className="text-xs font-semibold tabular-nums" style={{ color: 'inherit', opacity: 0.6 }}>{timeDisplay}</span>
+                                    <span className="text-sm font-bold truncate" style={{ color: 'inherit' }}>{e.playerName}{extraInfo}</span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
                           );
                         })}
                       </div>

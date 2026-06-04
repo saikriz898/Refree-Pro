@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useMatchStore } from '@/store/matchStore';
 import * as THREE from 'three';
@@ -23,13 +23,18 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
   const halfTextRef = useRef<HTMLSpanElement>(null);
   const isRunningRef = useRef<boolean>(false);
   
-  useFrame((state, delta) => {
-    // Smooth 3D bobbing animation
-    const t = state.clock.getElapsedTime();
-    if (watchGroup.current) {
-      watchGroup.current.position.y = Math.sin(t * 2) * 0.05;
-    }
+  const [isLight, setIsLight] = useState(false);
 
+  useEffect(() => {
+    const checkTheme = () => setIsLight(document.documentElement.classList.contains('light'));
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
+  useFrame((state, delta) => {
+    // Floating animation removed per user request
     const matchState = useMatchStore.getState();
     const timer = matchState.timer;
     const elapsedMs = timer.elapsedMs;
@@ -63,30 +68,36 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
       halfTextRef.current.innerText = halfLabels[currentHalf] ?? 'MATCH';
     }
     
-    if (timeTextRef.current && msTextRef.current) {
-       timeTextRef.current.className = timer.isRunning ? 'text-live text-3xl font-extrabold tabular-nums' : 'text-muted-foreground text-3xl font-extrabold tabular-nums';
-       msTextRef.current.className = timer.isRunning ? 'text-live opacity-75 font-bold ml-0.5 text-xl' : 'text-muted-foreground opacity-75 font-bold ml-0.5 text-xl';
+    if (timeTextRef.current && msTextRef.current && halfTextRef.current) {
+       const textColor = isLight ? '#ffffff' : '#000000';
+       
+       timeTextRef.current.style.color = textColor;
+       msTextRef.current.style.color = textColor;
+       halfTextRef.current.style.color = textColor;
+       
+       timeTextRef.current.className = 'text-3xl font-extrabold tabular-nums';
+       msTextRef.current.className = 'opacity-75 font-bold ml-0.5 text-xl';
     }
   });
 
   return (
     <group ref={watchGroup} rotation={[-0.1, 0, 0]}>
-      {/* Outer casing */}
+      {/* Outer casing (Realistic Metallic Silver) */}
       <mesh position={[0, 0, -0.05]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[2.2, 2.2, 0.2, 64]} />
-        <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#cbd5e1" metalness={0.9} roughness={0.15} />
       </mesh>
       
       {/* Silver trim ring */}
       <mesh position={[0, 0, 0.05]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[2.05, 2.2, 0.05, 64]} />
-        <meshStandardMaterial color="#cbd5e1" metalness={1} roughness={0.15} />
+        <meshStandardMaterial color="#e2e8f0" metalness={1} roughness={0.1} />
       </mesh>
       
       {/* Dial base */}
       <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]} receiveShadow>
         <cylinderGeometry args={[2, 2, 0.1, 64]} />
-        <meshStandardMaterial color="#f8fafc" roughness={0.9} metalness={0.1} />
+        <meshStandardMaterial color={isLight ? "#0f172a" : "#f8fafc"} roughness={0.9} metalness={0.1} />
       </mesh>
 
       {/* Tick Marks */}
@@ -100,16 +111,16 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
           return (
             <mesh key={i} position={[x, y, 0]} rotation={[0, 0, -angle]}>
               <boxGeometry args={[isMajor ? 0.03 : 0.015, isMajor ? 0.15 : 0.08, 0.01]} />
-              <meshStandardMaterial color={isMajor ? "#0f172a" : "#94a3b8"} />
+              <meshStandardMaterial color={isLight ? (isMajor ? "#ffffff" : "#64748b") : (isMajor ? "#0f172a" : "#94a3b8")} />
             </mesh>
           );
         })}
       </group>
 
-      {/* Top Button */}
+      {/* Top Button (Metallic Crown) */}
       <mesh position={[0, 2.3, 0]} castShadow>
         <cylinderGeometry args={[0.25, 0.25, 0.4, 32]} />
-        <meshStandardMaterial color="#ef4444" metalness={0.6} roughness={0.2} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.2} />
       </mesh>
       <mesh position={[0, 2.1, 0]} castShadow>
         <cylinderGeometry args={[0.15, 0.15, 0.2, 32]} />
@@ -120,11 +131,11 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
       <group ref={minuteHand} position={[0, 0, 0.1]}>
         <mesh position={[0, 0.6, 0]} castShadow>
           <boxGeometry args={[0.06, 1.2, 0.02]} />
-          <meshStandardMaterial color="#334155" />
+          <meshStandardMaterial color={isLight ? "#ffffff" : "#334155"} />
         </mesh>
         <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[0.08, 0.08, 0.03, 16]} />
-          <meshStandardMaterial color="#334155" />
+          <meshStandardMaterial color={isLight ? "#ffffff" : "#334155"} />
         </mesh>
       </group>
       
@@ -143,25 +154,23 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
       {/* Glass cover */}
       <mesh position={[0, 0, 0.2]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[2, 2, 0.02, 64]} />
-        <meshPhysicalMaterial 
+        <meshStandardMaterial 
           color="#ffffff" 
           metalness={0.1} 
           roughness={0.05} 
-          transmission={0.95} 
-          thickness={0.1} 
           transparent={true} 
-          opacity={0.3} 
+          opacity={0.1} 
         />
       </mesh>
 
       {/* Digital display overlay */}
-      <Html transform position={[0, -0.6, 0.12]} className="pointer-events-none select-none flex flex-col items-center">
-        <span ref={halfTextRef} className="text-[10px] text-muted-foreground tracking-widest font-bold bg-background/50 backdrop-blur-sm px-2 py-0.5 rounded-full mb-1">
+      <Html transform position={[0, -0.15, 0.12]} className="pointer-events-none select-none flex flex-col items-center">
+        <span ref={halfTextRef} className="text-[10px] tracking-widest font-bold mb-1">
           MATCH
         </span>
-        <div className="bg-background/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-border/20 shadow-inner flex items-baseline justify-center min-w-[120px]">
-          <span ref={timeTextRef} className="text-3xl font-extrabold tabular-nums text-muted-foreground">00:00</span>
-          <span ref={msTextRef} className="text-xl opacity-75 font-bold ml-0.5 text-muted-foreground">.0</span>
+        <div className="flex items-baseline justify-center min-w-[120px]">
+          <span ref={timeTextRef} className="text-3xl font-extrabold tabular-nums">00:00</span>
+          <span ref={msTextRef} className="text-xl opacity-75 font-bold ml-0.5">.0</span>
         </div>
       </Html>
     </group>
@@ -170,9 +179,9 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
 
 export function StopwatchModel({ matchDuration = 45, size = 320 }: StopwatchModelProps) {
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <div style={{ width: size, height: size }} className="relative z-10">
-        <Canvas camera={{ position: [0, 0, 4.5], fov: 60 }} shadows>
+    <div className="flex flex-col items-center justify-center w-full flex-1 min-h-0">
+      <div style={{ maxWidth: size, maxHeight: size }} className="relative z-10 w-full h-full aspect-square">
+        <Canvas camera={{ position: [0, 0, 4.5], fov: 60 }} shadows className="w-full h-full">
           <ambientLight intensity={0.6} />
           {/* Key light */}
           <directionalLight 
@@ -188,7 +197,7 @@ export function StopwatchModel({ matchDuration = 45, size = 320 }: StopwatchMode
         </Canvas>
       </div>
       {/* Dynamic breathing drop shadow */}
-      <div className="w-48 h-3 bg-black/10 dark:bg-black/40 rounded-full blur-xl -mt-6 animate-pulse" />
+      <div className="w-48 h-3 bg-black/10 dark:bg-black/40 rounded-full blur-xl -mt-6 animate-pulse shrink-0" />
     </div>
   );
 }

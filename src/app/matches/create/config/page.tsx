@@ -177,9 +177,18 @@ export default function ConfigPage() {
       </div>
 
       {/* Sticky Bottom Actions */}
-      <div className="bg-background/85 backdrop-blur-md border-t border-border/10 px-4 py-3.5 flex gap-3 sticky bottom-0 z-40 shrink-0">
-        <Button variant="ghost" className="w-1/3" onClick={() => router.back()}>← Back</Button>
-        <Button className="flex-1" onClick={() => router.push('/matches/create/review')}>
+      <div className="bg-background/85 backdrop-blur-md border-t border-border/10 px-4 py-4 flex gap-3 sticky bottom-0 z-40 shrink-0 pb-safe">
+        <Button 
+          variant="ghost" 
+          className="w-1/3 font-semibold text-muted-foreground hover:bg-foreground/5" 
+          onClick={() => router.back()}
+        >
+          ← Back
+        </Button>
+        <Button 
+          className="flex-1 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow text-[15px] font-bold" 
+          onClick={() => router.push('/matches/create/review')}
+        >
           Next → Review
         </Button>
       </div>

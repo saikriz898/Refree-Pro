@@ -45,7 +45,13 @@ export default function DetailsPage() {
     });
 
     fetch('/api/matches').then(r => r.json()).then(d => {
-      setExistingMatches(Array.isArray(d) ? d : []);
+      const fetchedMatches = Array.isArray(d) ? d : [];
+      setExistingMatches(fetchedMatches);
+      
+      if (!state.matchNumber) {
+        const highest = fetchedMatches.reduce((max, m) => Math.max(max, m.matchNumber || 0), 0);
+        update({ matchNumber: String(highest + 1) });
+      }
     });
 
     let initialDate = state.matchDate;
@@ -53,8 +59,6 @@ export default function DetailsPage() {
       initialDate = todayStr;
       update({ matchDate: todayStr });
     }
-
-    if (!state.matchNumber) update({ matchNumber: '1' });
 
     // Set default time to exact current time on page load
     if (!state.matchTime) {
@@ -129,7 +133,7 @@ export default function DetailsPage() {
                 onChange={(e) => update({ venue: e.target.value })} placeholder="Enter venue name..." />
             </div>
             <div>
-              <Input label="Match #" icon={<Hash size={16} />} type="number" value={state.matchNumber}
+              <Input label="Match Number" type="number" value={state.matchNumber}
                 onChange={(e) => update({ matchNumber: e.target.value })} placeholder="e.g. 1" />
             </div>
           </div>
@@ -214,10 +218,20 @@ export default function DetailsPage() {
       </div>
 
       {/* Sticky Bottom Footer */}
-      <div className="bg-background/85 backdrop-blur-md border-t border-border/10 px-4 py-3.5 flex gap-3 sticky bottom-0 z-40 shrink-0">
-        <Button variant="ghost" className="w-1/3" onClick={() => router.push('/matches')}>Cancel</Button>
-        <Button className="flex-1" disabled={!valid} onClick={() => router.push('/matches/create/teams')}>
-          {valid ? 'Next Step' : 'Fill Required Fields'}
+      <div className="bg-background/85 backdrop-blur-md border-t border-border/10 px-4 py-4 flex gap-3 sticky bottom-0 z-40 shrink-0 pb-safe">
+        <Button 
+          variant="ghost" 
+          className="w-1/3 font-semibold text-muted-foreground hover:bg-foreground/5" 
+          onClick={() => router.push('/matches')}
+        >
+          Cancel
+        </Button>
+        <Button 
+          className="flex-1 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow text-[15px] font-bold" 
+          disabled={!valid} 
+          onClick={() => router.push('/matches/create/teams')}
+        >
+          {valid ? 'Next Step →' : 'Fill Required Fields'}
         </Button>
       </div>
     </div>
