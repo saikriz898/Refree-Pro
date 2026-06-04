@@ -21,7 +21,7 @@ export function QuickActions({ onGoal, onYellow, onRed, onSub, onUndo, disabled 
   ];
 
   return (
-    <div className="pb-safe px-2 pt-2 lg:px-0">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-2xl border-t border-border/50 pb-[env(safe-area-inset-bottom)] px-2 pt-2 lg:relative lg:bottom-auto lg:left-auto lg:right-auto lg:z-0 lg:bg-transparent lg:backdrop-blur-none lg:border-t-0 lg:pb-0 lg:px-0">
       <div className="glass border border-border/50 rounded-2xl p-2 mb-2 lg:mb-0 mx-2 lg:mx-0 shadow-2xl flex justify-between gap-1">
         {actions.map((a) => (
           <button

@@ -220,8 +220,8 @@ export default function LiveMatchPage({ params }: { params: Promise<{ id: string
         </div>
 
         {/* Main */}
-        <div className="flex-1 flex flex-col">
-          <div className="flex-1 flex flex-col items-center justify-center px-4 gap-4 w-full max-w-2xl mx-auto">
+        <div className="flex-1 flex flex-col overflow-y-auto lg:overflow-hidden">
+          <div className="flex-1 flex flex-col items-center justify-center px-4 gap-4 w-full max-w-2xl mx-auto pb-32 lg:pb-4">
             <Scoreboard
               teamA={match.teamA} teamB={match.teamB}
               scoreA={scoreA} scoreB={scoreB}
