@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMatchStore } from '@/store/matchStore';
 import { MatchTimer } from '@/lib/timer';
 import { Scoreboard } from '@/components/match/Scoreboard';
-import { TimerDisplay } from '@/components/match/TimerDisplay';
+import { StopwatchModel } from '@/components/3d/StopwatchModel';
 import { QuickActions } from '@/components/match/QuickActions';
 import { GoalModal } from '@/components/match/GoalModal';
 import { CardModal } from '@/components/match/CardModal';
@@ -92,6 +92,15 @@ export default function LiveMatchPage({ params }: { params: Promise<{ id: string
           elapsedMs: elapsed,
         });
         if (t.isRunning) toast('Resumed from saved state', 'info');
+      } else {
+        setTimer({
+          startedAtUnix: null,
+          pausedAtUnix: null,
+          totalPausedMs: 0,
+          isRunning: false,
+          currentHalf: 1,
+          elapsedMs: 0,
+        });
       }
     });
   }, [params]);
@@ -295,15 +304,7 @@ export default function LiveMatchPage({ params }: { params: Promise<{ id: string
               teamAColor={match.teamAColor} teamBColor={match.teamBColor}
             />
 
-            <TimerDisplay
-              startedAtUnix={timer.startedAtUnix}
-              totalPausedMs={timer.totalPausedMs}
-              pausedAtUnix={timer.pausedAtUnix}
-              isRunning={timer.isRunning}
-              elapsedMs={timer.elapsedMs}
-              currentHalf={timer.currentHalf}
-              matchDuration={match?.matchDuration}
-            />
+            <StopwatchModel matchDuration={match?.matchDuration} size={280} />
 
             {/* Timer controls */}
             <div className="flex w-full max-w-sm gap-2 mt-2">

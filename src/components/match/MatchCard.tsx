@@ -38,12 +38,18 @@ export function MatchCard({ id, matchNumber, teamA, teamB, teamAColor, teamBColo
           <Badge status={displayStatus} />
         </div>
         <div className="flex items-center justify-between gap-2">
-          <span className="font-bold text-sm flex-1 truncate" style={{ color: teamAColor }}>{teamA}</span>
+          <div className="flex items-center gap-1.5 flex-1 min-w-0">
+            <span className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: teamAColor || '#3b82f6' }} />
+            <span className="font-bold text-sm text-foreground truncate">{teamA}</span>
+          </div>
           {(status !== 'scheduled') && (
-            <span className="score-digit text-2xl text-foreground px-2">{scoreA ?? 0} - {scoreB ?? 0}</span>
+            <span className="score-digit text-2xl text-foreground px-2 shrink-0">{scoreA ?? 0} - {scoreB ?? 0}</span>
           )}
-          {status === 'scheduled' && <span className="text-muted text-sm px-2">vs</span>}
-          <span className="font-bold text-sm flex-1 truncate text-right" style={{ color: teamBColor }}>{teamB}</span>
+          {status === 'scheduled' && <span className="text-muted text-sm px-2 shrink-0">vs</span>}
+          <div className="flex items-center justify-end gap-1.5 flex-1 min-w-0">
+            <span className="font-bold text-sm text-foreground truncate text-right">{teamB}</span>
+            <span className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: teamBColor || '#ef4444' }} />
+          </div>
         </div>
         <div className="flex items-center gap-3 mt-3 text-xs text-muted">
           <span className="flex items-center gap-1"><MapPin size={11} />{venue}</span>

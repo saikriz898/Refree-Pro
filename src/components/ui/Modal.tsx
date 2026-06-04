@@ -34,7 +34,7 @@ export function Modal({ open, onClose, title, children, className, position }: M
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100]"
           />
           <motion.div
             initial={isBottom ? { opacity: 0, y: '100%' } : { opacity: 0, y: 60, scale: 0.95 }}
@@ -42,7 +42,7 @@ export function Modal({ open, onClose, title, children, className, position }: M
             exit={isBottom ? { opacity: 0, y: '100%' } : { opacity: 0, y: 60, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className={cn(
-              'z-50 p-6 shadow-2xl',
+              'z-[100] p-6 shadow-2xl',
               isBottom 
                 ? 'w-full max-w-md fixed bottom-0 left-1/2 -translate-x-1/2 rounded-t-3xl rounded-b-none pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] bg-[#E5E5EA] dark:bg-[#1C1C1E] border-t border-black/10 dark:border-white/10' 
                 : 'w-[90%] max-w-[340px] fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[28px] bg-[#E5E5EA] dark:bg-[#1C1C1E] border border-black/10 dark:border-white/10',
