@@ -17,6 +17,8 @@ export default function CreateTournamentPage() {
   const { toast } = useToast();
   const router = useRouter();
 
+  const todayStr = new Date().toISOString().split('T')[0];
+
   const handleCreate = async () => {
     if (!name || !venue || !startDate || !endDate) return;
     setLoading(true);
@@ -33,7 +35,10 @@ export default function CreateTournamentPage() {
     } catch { toast('Failed to create tournament', 'error'); setLoading(false); }
   };
 
-  const valid = name && venue && startDate && endDate;
+  const isPastStartDate = startDate && startDate < todayStr;
+  const isInvalidEndDate = startDate && endDate && endDate < startDate;
+
+  const valid = name && venue && startDate && endDate && !isPastStartDate && !isInvalidEndDate;
 
   return (
     <div className="fixed inset-y-0 left-1/2 -translate-x-1/2 w-full max-w-lg flex flex-col justify-between overflow-hidden bg-background border-x border-border/5">
@@ -51,7 +56,7 @@ export default function CreateTournamentPage() {
       </div>
 
       {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-hidden px-4 flex flex-col justify-center relative min-h-0">
+      <div className="flex-1 overflow-y-auto px-4 py-8 flex flex-col relative min-h-0">
         {/* Ambient Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-48 bg-primary/5 blur-[80px] rounded-full pointer-events-none" />
 
@@ -97,8 +102,15 @@ export default function CreateTournamentPage() {
                       label="Start Date" 
                       icon={<Calendar size={14} />} 
                       type="date" 
+                      min={todayStr}
                       value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)} 
+                      onChange={(e) => {
+                        setStartDate(e.target.value);
+                        if (endDate && e.target.value > endDate) {
+                          setEndDate(e.target.value);
+                        }
+                      }} 
+                      error={isPastStartDate ? "Cannot be in past" : undefined}
                     />
                   </div>
                   <div>
@@ -106,8 +118,10 @@ export default function CreateTournamentPage() {
                       label="End Date" 
                       icon={<Calendar size={14} />} 
                       type="date" 
+                      min={startDate || todayStr}
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)} 
+                      error={isInvalidEndDate ? "Must be after start date" : undefined}
                     />
                   </div>
                 </div>

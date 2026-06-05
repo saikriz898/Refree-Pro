@@ -79,10 +79,11 @@ export default function FinishPage({ params }: { params: Promise<{ id: string }>
             <div className="space-y-1">
               {activeEvents.map(e => {
                 const type = e.eventType === 'goal' ? 'goal' : e.cardType === 'yellow' ? 'yellow' : e.cardType === 'red' ? 'red' : 'sub';
-                const playerName = e.eventType === 'sub' ? `${e.playerOut} → ${e.playerIn}` : e.playerName;
+                let playerName = e.eventType === 'sub' ? `${e.playerOut} → ${e.playerIn}` : e.playerName;
+                if (e.jerseyNo) playerName += ` (${e.jerseyNo})`;
                 const extraInfo = e.eventType === 'goal' && e.goalType !== 'normal' ? ` (${e.goalType})` : '';
                 return (
-                  <EventItem key={e.id} minute={e.minute}
+                  <EventItem key={e.id} minute={e.minute} elapsedMs={e.elapsedMs}
                     type={type}
                     playerName={`${playerName}${extraInfo}`}
                     teamSide={e.team === 'team_a' ? 'home' : 'away'}

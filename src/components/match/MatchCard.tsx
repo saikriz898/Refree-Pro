@@ -34,7 +34,7 @@ export function MatchCard({ id, matchNumber, teamA, teamB, teamAColor, teamBColo
     <Link href={`/matches/${id}`}>
       <Card hover className="group">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-muted font-mono">MATCH #{matchNumber}</span>
+          <span className="text-xs text-muted font-mono">MATCH {matchNumber}</span>
           <Badge status={displayStatus} />
         </div>
         <div className="flex items-center justify-between gap-2">

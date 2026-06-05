@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -48,7 +48,9 @@ export function FootballModel({ size = 300 }: { size?: number }) {
           />
           {/* Blue accent backlight */}
           <pointLight position={[-4, -2, -3]} intensity={1.5} color="#3b82f6" />
-          <SoccerBall />
+          <Suspense fallback={null}>
+            <SoccerBall />
+          </Suspense>
         </Canvas>
       </div>
       {/* Glowing breathing drop shadow underneath ball */}

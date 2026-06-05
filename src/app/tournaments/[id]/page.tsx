@@ -161,7 +161,7 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
 
         {tab === 'report' && (
           <Card className="p-6 text-center">
-            <p className="text-white/60 mb-4">Generate a comprehensive PDF report for this tournament.</p>
+            <p className="text-muted mb-4">Generate a comprehensive PDF report for this tournament.</p>
             <Button onClick={() => router.push(`/tournaments/${id}/report`)}>
               <FileText size={16} /> Generate Tournament Report
             </Button>
@@ -170,7 +170,7 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
 
         {/* Delete Confirmation Modal */}
         <Modal open={showDeleteModal} onClose={() => setShowDeleteModal(false)} title="Delete Tournament">
-          <p className="text-white/60 text-sm mb-6">
+          <p className="text-muted text-sm mb-6">
             Are you sure you want to delete this tournament? This action cannot be undone and will permanently remove all associated matches, standings, and reports.
           </p>
           <div className="flex gap-3">

@@ -131,7 +131,7 @@ export default function MatchReportPage({ params }: { params: Promise<{ id: stri
         </div>
         <h1 className="text-2xl font-bold mb-2">Match Report</h1>
         <p className="text-muted text-sm mb-6">
-          {match.teamA} vs {match.teamB} · Match #{match.matchNumber}
+          {match.teamA} vs {match.teamB} · Match {match.matchNumber}
         </p>
         <div className="glass rounded-xl p-4 text-left text-sm text-muted mb-6 space-y-1">
           <p>✓ Match details & result</p>

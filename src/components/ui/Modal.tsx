@@ -14,16 +14,7 @@ interface ModalProps {
 }
 
 export function Modal({ open, onClose, title, children, className, position }: ModalProps) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
-
-  const isBottom = position !== undefined ? position === 'bottom' : isMobile;
+  const isBottom = position !== undefined ? position === 'bottom' : true;
   
   return (
     <AnimatePresence>

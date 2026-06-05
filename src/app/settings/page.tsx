@@ -65,7 +65,7 @@ export default function SettingsPage() {
           page = pdfDoc.addPage([595, 842]);
           y = height - 50;
         }
-        draw(`Match #${m.matchNumber}: ${m.teamA} vs ${m.teamB}`, 50, y, 12, bold); y -= 15;
+        draw(`Match ${m.matchNumber}: ${m.teamA} vs ${m.teamB}`, 50, y, 12, bold); y -= 15;
         draw(`Date: ${m.matchDate}  |  Venue: ${m.venue}  |  Score: ${m.scoreA ?? 0} - ${m.scoreB ?? 0}`, 50, y, 10, font); y -= 25;
       }
 

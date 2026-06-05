@@ -62,7 +62,7 @@ export default function EditMatchPage({ params }: { params: Promise<{ id: string
   return (
     <div className="min-h-screen p-4 md:p-8 max-w-lg mx-auto">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold mb-2">Edit Match #{match.matchNumber}</h1>
+        <h1 className="text-2xl font-bold mb-2">Edit Match {match.matchNumber}</h1>
         <p className="text-white/40 text-sm mb-6">{match.teamA} vs {match.teamB}</p>
 
         <div className="space-y-4">

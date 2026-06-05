@@ -18,6 +18,9 @@ export default function EditTournamentPage({ params }: { params: Promise<{ id: s
   const { toast } = useToast();
   const router = useRouter();
 
+  const isInvalidEndDate = startDate && endDate && endDate < startDate;
+  const valid = name && venue && startDate && endDate && !isInvalidEndDate;
+
   useEffect(() => {
     params.then(async ({ id }) => {
       setId(id);
@@ -49,13 +52,16 @@ export default function EditTournamentPage({ params }: { params: Promise<{ id: s
           <Input label="Tournament Name" value={name} onChange={e => setName(e.target.value)} />
           <Input label="Venue" icon={<MapPin size={15} />} value={venue} onChange={e => setVenue(e.target.value)} />
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Start Date" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
-            <Input label="End Date" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+            <Input label="Start Date" type="date" value={startDate} onChange={e => {
+              setStartDate(e.target.value);
+              if (endDate && e.target.value > endDate) setEndDate(e.target.value);
+            }} />
+            <Input label="End Date" type="date" min={startDate} value={endDate} onChange={e => setEndDate(e.target.value)} error={isInvalidEndDate ? "Must be after start date" : undefined} />
           </div>
         </Card>
         <div className="flex gap-3 mt-6">
           <Button variant="ghost" onClick={() => router.back()}>Cancel</Button>
-          <Button className="flex-1" onClick={handleSave} loading={loading}>Save Changes</Button>
+          <Button className="flex-1" onClick={handleSave} disabled={!valid} loading={loading}>Save Changes</Button>
         </div>
       </motion.div>
     </div>

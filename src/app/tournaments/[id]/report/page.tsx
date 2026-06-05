@@ -60,7 +60,7 @@ export default function TournamentReportPage({ params }: { params: Promise<{ id:
       y = height - 60;
       page.drawText('FIXTURES & RESULTS', { x: 50, y, size: 12, font: bold, color: green }); y -= 20;
       matches.filter(m => m.status === 'completed').forEach(m => {
-        page.drawText(`${m.matchDate}  Match #${m.matchNumber}  ${m.teamA} ${m.scoreA ?? 0} – ${m.scoreB ?? 0} ${m.teamB}`, { x: 50, y, size: 10, font });
+        page.drawText(`${m.matchDate}  Match ${m.matchNumber}  ${m.teamA} ${m.scoreA ?? 0} – ${m.scoreB ?? 0} ${m.teamB}`, { x: 50, y, size: 10, font });
         y -= 14; if (y < 80) { page = pdfDoc.addPage([595, 842]); y = height - 60; }
       });
 

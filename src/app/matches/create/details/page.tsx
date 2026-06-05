@@ -109,7 +109,7 @@ export default function DetailsPage() {
       </div>
 
       {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-5">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 py-4 space-y-5">
         <CreateMatchStepper current={0} />
 
         <div className="space-y-4 pt-1">

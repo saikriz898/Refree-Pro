@@ -52,7 +52,7 @@ export default function MatchDetailPage({ params }: { params: Promise<{ id: stri
             <div className="glass rounded-xl p-5 mb-4">
               <div className="flex items-center justify-between mb-3">
                 <Badge status={match.status} />
-                <span className="text-xs text-muted">Match #{match.matchNumber}</span>
+                <span className="text-xs text-muted">Match {match.matchNumber}</span>
               </div>
               <Scoreboard teamA={match.teamA} teamB={match.teamB}
                 scoreA={match.scoreA ?? 0} scoreB={match.scoreB ?? 0}

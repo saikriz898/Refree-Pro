@@ -57,7 +57,7 @@ export default function IntroPage({ params }: { params: Promise<{ id: string }> 
         </motion.div>
 
         <motion.div variants={item} className="glass rounded-xl px-6 py-3 inline-flex items-center gap-4 mb-8 text-sm text-muted hover:text-foreground">
-          <span>Match #{match.matchNumber}</span>
+          <span>Match {match.matchNumber}</span>
           <span>·</span>
           <span>{match.squadFormat}</span>
           <span>·</span>

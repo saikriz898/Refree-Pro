@@ -245,7 +245,8 @@ export default function LiveMatchPage({ params }: { params: Promise<{ id: string
     <div className="space-y-1">
       {[...evts].reverse().map((e, i) => {
         const type = e.eventType === 'goal' ? 'goal' : e.cardType ? 'card' : 'sub';
-        const playerName = e.eventType === 'sub' ? `${e.playerOut} → ${e.playerIn}` : e.playerName;
+        let playerName = e.eventType === 'sub' ? `${e.playerOut} → ${e.playerIn}` : e.playerName;
+        if (e.jerseyNo) playerName += ` (${e.jerseyNo})`;
         const extraInfo = e.eventType === 'goal' && e.goalType !== 'normal' ? ` (${e.goalType})` : '';
         return (
           <EventItem
@@ -280,7 +281,7 @@ export default function LiveMatchPage({ params }: { params: Promise<{ id: string
         </div>
         <span className="flex items-center gap-2">
           {timer.isRunning && <span className="live-dot" />}
-          Match #{match.matchNumber}
+          Match {match.matchNumber}
         </span>
         <span>{match.matchDate}</span>
       </div>
@@ -294,7 +295,7 @@ export default function LiveMatchPage({ params }: { params: Promise<{ id: string
 
         {/* Main */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 flex flex-col items-center justify-between px-4 pt-2 pb-28 lg:pb-4 w-full max-w-2xl mx-auto min-h-0">
+          <div className="flex-1 flex flex-col items-center justify-between overflow-y-auto px-4 pt-2 pb-28 lg:pb-4 w-full max-w-2xl mx-auto min-h-0">
             <div className="w-full shrink-0">
               <Scoreboard
                 teamA={match.teamA} teamB={match.teamB}

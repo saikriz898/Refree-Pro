@@ -45,7 +45,7 @@ export default function ReportsPage() {
                   <div key={m.id} className="glass rounded-xl p-3 flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium">{m.teamA} vs {m.teamB}</p>
-                      <p className="text-xs text-muted">{m.matchDate} · Match #{m.matchNumber}</p>
+                      <p className="text-xs text-muted">{m.matchDate} · Match {m.matchNumber}</p>
                     </div>
                     <Button size="sm" variant="secondary" onClick={() => router.push(`/matches/${m.id}/report`)}>
                       <FileText size={14} /> PDF
