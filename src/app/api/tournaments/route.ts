@@ -1,10 +1,17 @@
 import { db, tournaments } from '@/db';
-import { desc } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 export async function GET() {
   try {
-    const data = await db.select().from(tournaments).orderBy(desc(tournaments.createdAt));
+    const cookieStore = await cookies();
+    const deviceId = cookieStore.get('device_id')?.value;
+    
+    let query = db.select().from(tournaments).$dynamic();
+    if (deviceId) query = query.where(eq(tournaments.deviceId, deviceId));
+    
+    const data = await query.orderBy(desc(tournaments.createdAt));
     return NextResponse.json(data);
   } catch (e) {
     return NextResponse.json({ error: 'Failed to fetch tournaments' }, { status: 500 });
@@ -20,6 +27,7 @@ export async function POST(req: Request) {
       startDate: body.startDate,
       endDate: body.endDate,
       status: 'active',
+      deviceId: (await cookies()).get('device_id')?.value || null,
     }).returning();
     return NextResponse.json(t, { status: 201 });
   } catch (e) {

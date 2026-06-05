@@ -26,10 +26,19 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   try {
     const { id } = await params;
     const body = await req.json();
+    
+    // Convert timestamp strings to Date objects for Drizzle
+    if (body.completedAt) body.completedAt = new Date(body.completedAt);
+    if (body.startedAt) body.startedAt = new Date(body.startedAt);
+    if (body.halftimeAt) body.halftimeAt = new Date(body.halftimeAt);
+    if (body.secondHalfStartedAt) body.secondHalfStartedAt = new Date(body.secondHalfStartedAt);
+    if (body.extraTimeStartedAt) body.extraTimeStartedAt = new Date(body.extraTimeStartedAt);
+
     const [m] = await db.update(matches).set(body).where(eq(matches.id, id)).returning();
     return NextResponse.json(m);
-  } catch (e) {
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+  } catch (e: any) {
+    console.error('PATCH Match Error:', e);
+    return NextResponse.json({ error: 'Failed', detail: String(e) }, { status: 500 });
   }
 }
 

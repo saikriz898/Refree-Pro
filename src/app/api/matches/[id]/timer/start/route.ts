@@ -38,7 +38,8 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
 
     const [t] = await db.select().from(matchTimerState).where(eq(matchTimerState.matchId, id));
     return NextResponse.json(t);
-  } catch (e) {
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+  } catch (e: any) {
+    console.error('Timer start error:', e);
+    return NextResponse.json({ error: e.message || 'Failed', detail: String(e) }, { status: 500 });
   }
 }

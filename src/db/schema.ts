@@ -7,6 +7,7 @@ export const tournaments = pgTable('tournaments', {
   startDate: date('start_date').notNull(),
   endDate: date('end_date').notNull(),
   status: text('status').notNull().default('active'),
+  deviceId: text('device_id'),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
@@ -35,6 +36,7 @@ export const matches = pgTable('matches', {
   extraTimeStartedAt: timestamp('extra_time_started_at'),
   completedAt: timestamp('completed_at'),
   isLocked: boolean('is_locked').default(false),
+  deviceId: text('device_id'),
   createdAt: timestamp('created_at').defaultNow(),
 });
 

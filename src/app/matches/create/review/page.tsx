@@ -118,10 +118,10 @@ export default function ReviewPage() {
                 <JerseyIcon color={state.teamAColor} />
               </div>
               <span 
-                className={`font-extrabold text-sm tracking-tight truncate max-w-full ${(state.teamAColor === '#F8F9F9' || state.teamAColor === '#1A1D20') ? 'px-2 py-0.5 rounded-md' : 'w-full'}`} 
+                className={`font-extrabold text-sm tracking-tight truncate max-w-full ${(state.teamAColor === '#FFFFFF' || state.teamAColor === '#1A1D20') ? 'px-2 py-0.5 rounded-md' : 'w-full'}`} 
                 style={{ 
                   color: state.teamAColor,
-                  backgroundColor: state.teamAColor === '#F8F9F9' ? '#1A1D20' : state.teamAColor === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                  backgroundColor: state.teamAColor === '#FFFFFF' ? '#1A1D20' : state.teamAColor === '#1A1D20' ? '#FFFFFF' : 'transparent'
                 }}>
                 {state.teamA || 'TEAM A'}
               </span>
@@ -140,10 +140,10 @@ export default function ReviewPage() {
                 <JerseyIcon color={state.teamBColor} />
               </div>
               <span 
-                className={`font-extrabold text-sm tracking-tight truncate max-w-full ${(state.teamBColor === '#F8F9F9' || state.teamBColor === '#1A1D20') ? 'px-2 py-0.5 rounded-md' : 'w-full'}`} 
+                className={`font-extrabold text-sm tracking-tight truncate max-w-full ${(state.teamBColor === '#FFFFFF' || state.teamBColor === '#1A1D20') ? 'px-2 py-0.5 rounded-md' : 'w-full'}`} 
                 style={{ 
                   color: state.teamBColor,
-                  backgroundColor: state.teamBColor === '#F8F9F9' ? '#1A1D20' : state.teamBColor === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                  backgroundColor: state.teamBColor === '#FFFFFF' ? '#1A1D20' : state.teamBColor === '#1A1D20' ? '#FFFFFF' : 'transparent'
                 }}>
                 {state.teamB || 'TEAM B'}
               </span>
@@ -185,10 +185,10 @@ export default function ReviewPage() {
                 <div className="flex items-center gap-1.5 mb-2">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: state.teamAColor }} />
                   <span 
-                    className={`text-[10px] font-bold tracking-wide truncate block ${(state.teamAColor === '#F8F9F9' || state.teamAColor === '#1A1D20') ? 'px-1.5 py-0.5 rounded-sm inline-block' : ''}`} 
+                    className={`text-[10px] font-bold tracking-wide truncate block ${(state.teamAColor === '#FFFFFF' || state.teamAColor === '#1A1D20') ? 'px-1.5 py-0.5 rounded-sm inline-block' : ''}`} 
                     style={{ 
                       color: state.teamAColor,
-                      backgroundColor: state.teamAColor === '#F8F9F9' ? '#1A1D20' : state.teamAColor === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                      backgroundColor: state.teamAColor === '#FFFFFF' ? '#1A1D20' : state.teamAColor === '#1A1D20' ? '#FFFFFF' : 'transparent'
                     }}>
                     {state.teamA || 'TEAM A'}
                   </span>
@@ -202,7 +202,7 @@ export default function ReviewPage() {
                         className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 shadow-sm"
                         style={{ 
                           backgroundColor: state.teamAColor,
-                          color: state.teamAColor === '#F8F9F9' || state.teamAColor === '#F1C40F' ? '#1A1D20' : '#FFF'
+                          color: state.teamAColor === '#FFFFFF' || state.teamAColor === '#F1C40F' ? '#1A1D20' : '#FFF'
                         }}
                       >
                         {p.jerseyNo ?? '—'}
@@ -218,10 +218,10 @@ export default function ReviewPage() {
                 <div className="flex items-center gap-1.5 mb-2">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: state.teamBColor }} />
                   <span 
-                    className={`text-[10px] font-bold tracking-wide truncate block ${(state.teamBColor === '#F8F9F9' || state.teamBColor === '#1A1D20') ? 'px-1.5 py-0.5 rounded-sm inline-block' : ''}`} 
+                    className={`text-[10px] font-bold tracking-wide truncate block ${(state.teamBColor === '#FFFFFF' || state.teamBColor === '#1A1D20') ? 'px-1.5 py-0.5 rounded-sm inline-block' : ''}`} 
                     style={{ 
                       color: state.teamBColor,
-                      backgroundColor: state.teamBColor === '#F8F9F9' ? '#1A1D20' : state.teamBColor === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                      backgroundColor: state.teamBColor === '#FFFFFF' ? '#1A1D20' : state.teamBColor === '#1A1D20' ? '#FFFFFF' : 'transparent'
                     }}>
                     {state.teamB || 'TEAM B'}
                   </span>
@@ -235,7 +235,7 @@ export default function ReviewPage() {
                         className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 shadow-sm"
                         style={{ 
                           backgroundColor: state.teamBColor,
-                          color: state.teamBColor === '#F8F9F9' || state.teamBColor === '#F1C40F' ? '#1A1D20' : '#FFF'
+                          color: state.teamBColor === '#FFFFFF' || state.teamBColor === '#F1C40F' ? '#1A1D20' : '#FFF'
                         }}
                       >
                         {p.jerseyNo ?? '—'}

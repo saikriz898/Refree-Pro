@@ -1,6 +1,7 @@
 import { db, matches } from '@/db';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and, SQL } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { neon } from '@neondatabase/serverless';
 
 export async function GET(req: Request) {
@@ -9,9 +10,17 @@ export async function GET(req: Request) {
     const status = url.searchParams.get('status');
     const tournamentId = url.searchParams.get('tournamentId');
 
+    const cookieStore = await cookies();
+    const deviceId = cookieStore.get('device_id')?.value;
+
+    let conditions: (SQL<unknown> | undefined)[] = [];
+    if (status) conditions.push(eq(matches.status, status));
+    if (tournamentId) conditions.push(eq(matches.tournamentId, tournamentId));
+    if (deviceId) conditions.push(eq(matches.deviceId, deviceId));
+
+    const finalCondition = conditions.length > 0 ? and(...conditions) : undefined;
     let query = db.select().from(matches).$dynamic();
-    if (status) query = query.where(eq(matches.status, status));
-    if (tournamentId) query = query.where(eq(matches.tournamentId, tournamentId));
+    if (finalCondition) query = query.where(finalCondition);
 
     const data = await query.orderBy(desc(matches.createdAt));
 
@@ -58,6 +67,9 @@ export async function POST(req: Request) {
     const refereeName = body.refereeName && String(body.refereeName).trim() !== '' ? String(body.refereeName).trim() : null;
     const extraTime = body.extraTime !== null && body.extraTime !== undefined && body.extraTime !== '' ? Number(body.extraTime) : null;
 
+    const cookieStore = await cookies();
+    const deviceId = cookieStore.get('device_id')?.value;
+
     // Use raw neon SQL to avoid any ORM type coercion issues
     const sql = neon(process.env.DATABASE_URL!);
 
@@ -67,6 +79,7 @@ export async function POST(req: Request) {
       WHERE match_date = ${body.matchDate} 
         AND match_time = ${body.matchTime} 
         AND LOWER(TRIM(venue)) = LOWER(TRIM(${body.venue}))
+        AND device_id = ${deviceId}
     `;
 
     if (existingConflicts && existingConflicts.length > 0) {
@@ -80,11 +93,11 @@ export async function POST(req: Request) {
       INSERT INTO matches (
         tournament_id, match_number, match_date, match_time, venue,
         referee_name, team_a, team_b, team_a_color, team_b_color,
-        squad_format, match_duration, break_duration, extra_time
+        squad_format, match_duration, break_duration, extra_time, device_id
       ) VALUES (
         ${tournamentId}, ${Number(body.matchNumber)}, ${body.matchDate}, ${body.matchTime}, ${body.venue.trim()},
         ${refereeName}, ${body.teamA.trim()}, ${body.teamB.trim()}, ${body.teamAColor ?? '#0F8A5F'}, ${body.teamBColor ?? '#E74C3C'},
-        ${body.squadFormat}, ${Number(body.matchDuration)}, ${Number(body.breakDuration)}, ${extraTime}
+        ${body.squadFormat}, ${Number(body.matchDuration)}, ${Number(body.breakDuration)}, ${extraTime}, ${deviceId}
       ) RETURNING *
     `;
 

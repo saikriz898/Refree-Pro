@@ -69,7 +69,7 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
     }
     
     if (timeTextRef.current && msTextRef.current && halfTextRef.current) {
-       const textColor = isLight ? '#ffffff' : '#000000';
+       const textColor = isLight ? '#000000' : '#ffffff';
        
        timeTextRef.current.style.color = textColor;
        msTextRef.current.style.color = textColor;
@@ -97,7 +97,7 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
       {/* Dial base */}
       <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]} receiveShadow>
         <cylinderGeometry args={[2, 2, 0.1, 64]} />
-        <meshStandardMaterial color={isLight ? "#0f172a" : "#f8fafc"} roughness={0.9} metalness={0.1} />
+        <meshStandardMaterial color={isLight ? "#f8fafc" : "#0f172a"} roughness={0.9} metalness={0.1} />
       </mesh>
 
       {/* Tick Marks */}
@@ -111,7 +111,7 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
           return (
             <mesh key={i} position={[x, y, 0]} rotation={[0, 0, -angle]}>
               <boxGeometry args={[isMajor ? 0.03 : 0.015, isMajor ? 0.15 : 0.08, 0.01]} />
-              <meshStandardMaterial color={isLight ? (isMajor ? "#ffffff" : "#64748b") : (isMajor ? "#0f172a" : "#94a3b8")} />
+              <meshStandardMaterial color={isLight ? (isMajor ? "#0f172a" : "#94a3b8") : (isMajor ? "#ffffff" : "#64748b")} />
             </mesh>
           );
         })}
@@ -131,11 +131,11 @@ function WatchSystem({ matchDuration = 45 }: { matchDuration?: number }) {
       <group ref={minuteHand} position={[0, 0, 0.1]}>
         <mesh position={[0, 0.6, 0]} castShadow>
           <boxGeometry args={[0.06, 1.2, 0.02]} />
-          <meshStandardMaterial color={isLight ? "#ffffff" : "#334155"} />
+          <meshStandardMaterial color={isLight ? "#334155" : "#ffffff"} />
         </mesh>
         <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[0.08, 0.08, 0.03, 16]} />
-          <meshStandardMaterial color={isLight ? "#ffffff" : "#334155"} />
+          <meshStandardMaterial color={isLight ? "#334155" : "#ffffff"} />
         </mesh>
       </group>
       
@@ -181,7 +181,7 @@ export function StopwatchModel({ matchDuration = 45, size = 320 }: StopwatchMode
   return (
     <div className="flex flex-col items-center justify-center w-full flex-1 min-h-0">
       <div style={{ maxWidth: size, maxHeight: size }} className="relative z-10 w-full h-full aspect-square">
-        <Canvas camera={{ position: [0, 0, 4.5], fov: 60 }} shadows className="w-full h-full">
+        <Canvas gl={{ localClippingEnabled: true }} shadows={{ type: THREE.PCFShadowMap }} camera={{ position: [0, 0, 4.5], fov: 60 }} className="w-full h-full">
           <ambientLight intensity={0.6} />
           {/* Key light */}
           <directionalLight 

@@ -21,7 +21,7 @@ const colors = [
   '#78281F', // Maroon
   '#117A65', // Teal
   '#D4AF37', // Gold
-  '#F8F9F9', // White
+  '#FFFFFF', // White
   '#1A1D20', // Black
   '#566573', // Grey
 ];
@@ -94,11 +94,11 @@ export default function TeamsPage() {
                       onChange={(e) => update({ [key]: e.target.value.toUpperCase() } as any)}
                       className={cn(
                         "w-full text-base font-extrabold outline-none placeholder-muted/50 transition-colors uppercase border-none focus:ring-0",
-                        name && (color === '#F8F9F9' || color === '#1A1D20') ? "px-2 py-0.5 rounded-md" : "p-0 bg-transparent"
+                        name && (color === '#FFFFFF' || color === '#1A1D20') ? "px-2 py-0.5 rounded-md" : "p-0 bg-transparent"
                       )}
                       style={{ 
                         color: name ? color : 'var(--color-foreground)',
-                        backgroundColor: name && color === '#F8F9F9' ? '#1A1D20' : name && color === '#1A1D20' ? '#F8F9F9' : 'transparent'
+                        backgroundColor: name && color === '#FFFFFF' ? '#1A1D20' : name && color === '#1A1D20' ? '#FFFFFF' : 'transparent'
                       }}
                       placeholder={`Enter ${label} name...`}
                     />

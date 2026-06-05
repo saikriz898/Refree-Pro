@@ -35,8 +35,12 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
       const dataUrl = await toPng(posterRef.current, { pixelRatio: 2 });
       const a = document.createElement('a');
       a.href = dataUrl;
-      a.download = `match-poster-${match?.matchNumber}.png`;
+      const teamA = match?.teamA ? match.teamA.replace(/\s+/g, '-') : 'TeamA';
+      const teamB = match?.teamB ? match.teamB.replace(/\s+/g, '-') : 'TeamB';
+      a.download = `Match-Poster-${teamA}-vs-${teamB}.png`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
     } catch { alert('Export failed. Try again.'); }
     finally { setLoading(false); }
   };
@@ -224,7 +228,7 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
                     <div className="flex items-center justify-between mb-8 w-full">
                       <div className="flex flex-col items-center w-24 shrink-0">
                         <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 border-2 border-white/20 shrink-0 shadow-inner" style={{ backgroundColor: match.teamAColor }}>
-                          <span className="text-xl font-bold" style={{ color: (match.teamAColor?.toUpperCase() === '#F8F9F9' || match.teamAColor?.toUpperCase() === '#FFFFFF' || match.teamAColor?.toUpperCase() === '#F1C40F') ? '#1A1D20' : '#FFFFFF' }}>{match.teamA.charAt(0)}</span>
+                          <span className="text-xl font-bold" style={{ color: (match.teamAColor?.toUpperCase() === '#FFFFFF' || match.teamAColor?.toUpperCase() === '#F1C40F') ? '#1A1D20' : '#FFFFFF' }}>{match.teamA.charAt(0)}</span>
                         </div>
                         <span className={`text-[10px] font-bold uppercase tracking-widest truncate w-full text-center ${template === 1 ? 'text-black' : 'text-white'}`}>{match.teamA}</span>
                       </div>
@@ -237,7 +241,7 @@ export default function PosterPage({ params }: { params: Promise<{ id: string }>
 
                       <div className="flex flex-col items-center w-24 shrink-0">
                         <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 border-2 border-white/20 shrink-0 shadow-inner" style={{ backgroundColor: match.teamBColor }}>
-                          <span className="text-xl font-bold" style={{ color: (match.teamBColor?.toUpperCase() === '#F8F9F9' || match.teamBColor?.toUpperCase() === '#FFFFFF' || match.teamBColor?.toUpperCase() === '#F1C40F') ? '#1A1D20' : '#FFFFFF' }}>{match.teamB.charAt(0)}</span>
+                          <span className="text-xl font-bold" style={{ color: (match.teamBColor?.toUpperCase() === '#FFFFFF' || match.teamBColor?.toUpperCase() === '#F1C40F') ? '#1A1D20' : '#FFFFFF' }}>{match.teamB.charAt(0)}</span>
                         </div>
                         <span className={`text-[10px] font-bold uppercase tracking-widest truncate w-full text-center ${template === 1 ? 'text-black' : 'text-white'}`}>{match.teamB}</span>
                       </div>

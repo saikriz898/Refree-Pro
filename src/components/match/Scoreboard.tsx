@@ -36,7 +36,7 @@ function AnimatedScore({ value }: { value: number }) {
 export function Scoreboard({ teamA, teamB, scoreA, scoreB, teamAColor = '#0F8A5F', teamBColor = '#E74C3C', compact }: ScoreboardProps) {
   const getContrastStyle = (color: string) => {
     // If the selected color is pure white, render it as a solid "dark white" (slate-500) for clean visibility
-    if (color.toUpperCase() === '#F8F9F9' || color.toUpperCase() === '#FFFFFF') {
+    if (color.toUpperCase() === '#FFFFFF' || color.toUpperCase() === '#FFFFFF') {
       return { 
         color: '#64748b' // Slate-500 (Dark White / Gray)
       };

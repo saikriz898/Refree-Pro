@@ -16,6 +16,7 @@ export async function ensureTables() {
       start_date DATE NOT NULL,
       end_date DATE NOT NULL,
       status TEXT NOT NULL DEFAULT 'active',
+      device_id TEXT,
       created_at TIMESTAMP DEFAULT NOW()
     )
   `;
@@ -45,6 +46,7 @@ export async function ensureTables() {
       extra_time_started_at TIMESTAMP,
       completed_at TIMESTAMP,
       is_locked BOOLEAN DEFAULT FALSE,
+      device_id TEXT,
       created_at TIMESTAMP DEFAULT NOW()
     )
   `;
@@ -154,4 +156,8 @@ export async function ensureTables() {
   await sql`ALTER TABLE goals ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`;
   await sql`ALTER TABLE cards ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`;
   await sql`ALTER TABLE substitutions ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`;
+
+  // Ensure device_id columns exist to support scoped multi-tenancy without auth
+  await sql`ALTER TABLE tournaments ADD COLUMN IF NOT EXISTS device_id TEXT;`;
+  await sql`ALTER TABLE matches ADD COLUMN IF NOT EXISTS device_id TEXT;`;
 }
