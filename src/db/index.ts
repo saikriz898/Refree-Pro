@@ -1,14 +1,15 @@
-import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { PGlite } from '@electric-sql/pglite';
+import { drizzle } from 'drizzle-orm/pglite';
 import * as schema from './schema';
 
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle(sql, { schema });
+// Use IndexedDB for local offline persistence
+export const client = new PGlite('idb://referee-pro-db');
+export const db = drizzle(client, { schema });
 export * from './schema';
 
 // Run this once to ensure tables exist
 export async function ensureTables() {
-  await sql`
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS tournaments (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       name TEXT NOT NULL,
@@ -19,8 +20,8 @@ export async function ensureTables() {
       device_id TEXT,
       created_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS matches (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       tournament_id UUID REFERENCES tournaments(id),
@@ -49,8 +50,8 @@ export async function ensureTables() {
       device_id TEXT,
       created_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS players (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       match_id UUID REFERENCES matches(id) ON DELETE CASCADE NOT NULL,
@@ -59,8 +60,8 @@ export async function ensureTables() {
       jersey_no INTEGER,
       created_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS goals (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       match_id UUID REFERENCES matches(id) ON DELETE CASCADE NOT NULL,
@@ -72,8 +73,8 @@ export async function ensureTables() {
       is_undone BOOLEAN DEFAULT FALSE,
       created_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS cards (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       match_id UUID REFERENCES matches(id) ON DELETE CASCADE NOT NULL,
@@ -85,8 +86,8 @@ export async function ensureTables() {
       is_undone BOOLEAN DEFAULT FALSE,
       created_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS substitutions (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       match_id UUID REFERENCES matches(id) ON DELETE CASCADE NOT NULL,
@@ -97,8 +98,8 @@ export async function ensureTables() {
       is_undone BOOLEAN DEFAULT FALSE,
       created_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS penalty_shootout (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       match_id UUID REFERENCES matches(id) ON DELETE CASCADE NOT NULL,
@@ -109,8 +110,8 @@ export async function ensureTables() {
       result TEXT NOT NULL,
       created_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS match_timer_state (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       match_id UUID REFERENCES matches(id) ON DELETE CASCADE NOT NULL UNIQUE,
@@ -124,8 +125,8 @@ export async function ensureTables() {
       extra_started_at_unix BIGINT,
       updated_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS tournament_standings (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       tournament_id UUID REFERENCES tournaments(id) ON DELETE CASCADE NOT NULL,
@@ -142,22 +143,22 @@ export async function ensureTables() {
       head_to_head_gd INTEGER DEFAULT 0,
       updated_at TIMESTAMP DEFAULT NOW()
     )
-  `;
-  await sql`
+  `);
+  await client.exec(`
     CREATE TABLE IF NOT EXISTS app_settings (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       setting_key TEXT UNIQUE NOT NULL,
       setting_value TEXT,
       updated_at TIMESTAMP DEFAULT NOW()
     )
-  `;
+  `);
 
   // Ensure elapsed_ms columns exist for event logs to support stop clock laps
-  await sql`ALTER TABLE goals ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`;
-  await sql`ALTER TABLE cards ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`;
-  await sql`ALTER TABLE substitutions ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`;
+  await client.exec(`ALTER TABLE goals ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`);
+  await client.exec(`ALTER TABLE cards ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`);
+  await client.exec(`ALTER TABLE substitutions ADD COLUMN IF NOT EXISTS elapsed_ms INTEGER;`);
 
   // Ensure device_id columns exist to support scoped multi-tenancy without auth
-  await sql`ALTER TABLE tournaments ADD COLUMN IF NOT EXISTS device_id TEXT;`;
-  await sql`ALTER TABLE matches ADD COLUMN IF NOT EXISTS device_id TEXT;`;
+  await client.exec(`ALTER TABLE tournaments ADD COLUMN IF NOT EXISTS device_id TEXT;`);
+  await client.exec(`ALTER TABLE matches ADD COLUMN IF NOT EXISTS device_id TEXT;`);
 }
